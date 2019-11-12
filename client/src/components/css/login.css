@@ -1,0 +1,20 @@
+.login-page{
+    display: flex;
+    height: 92vh;
+    width: 100%;
+    justify-content: center;
+  }
+  .login-card{
+    margin-top: 75px;
+    height: 60%;
+    width: 40%;
+  }
+  .login-page .card{
+    box-shadow: 1px 8px 20px grey;
+  }
+  @media (max-width: 1028px){
+    .login-card{
+      height: 60%;
+      width: 75%;
+    }
+  }

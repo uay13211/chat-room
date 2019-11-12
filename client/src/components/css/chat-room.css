@@ -1,0 +1,10 @@
+.chat-room{
+    position: absolute;
+    left: 30vw;
+    top: 0;
+    height: 95vh;
+    width: 70vw;
+    background: black;
+    color: white;
+    overflow-y: scroll;
+}

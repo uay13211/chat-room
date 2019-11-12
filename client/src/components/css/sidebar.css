@@ -1,0 +1,98 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar{
+  height: 100vh;
+  width: 30vw;
+}
+
+.top-section{
+  height: 12%;
+  width: 100%;
+  background: grey;
+  display: flex;
+  align-items: center;
+}
+
+.top-section .icon-left{
+  flex: 1 0 60px;
+  height: 80%;
+  width: 100%;
+  margin: 10px;
+}
+
+.top-section .icon-left img{
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+
+}
+
+.top-section .icon-right{
+  display: flex;
+  flex: 5 1 auto;
+  height: 80%;
+  width: 100%;
+  margin: 10px;
+  justify-content: flex-end;
+}
+
+.top-section .icon-right i{
+  align-self: center;
+  padding: 0 30px 0;
+
+}
+
+.mid-section{
+  height: 8%;
+  width: 100%;
+  background: lightgrey;
+}
+
+.search-group{
+  position: relative;
+  height: 80%;
+  width: 90%;
+  background: white;
+  border-radius: 25px;
+  top: 10%;
+  left: 5%;
+}
+
+.search-group i{
+  position: relative;
+  top: 20%;
+  left: 0;
+}
+
+.search-group input{
+  position: relative;
+  top: 20%;
+  left: 5%;
+  height: 60%;
+  width: 75%;
+  border: none;
+  font-size: 18px;
+}
+
+.search-group input:focus{
+  outline: none;
+}
+
+.bottom-section{
+  height: 80%;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+.fd-item{
+  width: 100%;
+  height: 70px;
+}
+
+.fd-item:hover{
+  cursor: pointer;
+  background: grey;
+}
