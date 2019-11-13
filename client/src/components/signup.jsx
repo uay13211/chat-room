@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+//jshint esversion:6
+import React, { useState, useEffect, useContext } from "react";
 import "./css/login.css";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,18 +8,23 @@ import loginAction from "./action/login";
 const axios = require("axios");
 axios.defaults.withCredentials = true;
 
-export function Login() {
+export function SignUp() {
   // local state
-  const [data, setData] = useState({ username: "", password: "" });
+  const [data, setData] = useState({ username: "", email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState({
     usernameError: "",
+    emailError: "",
     passwordError: ""
   });
   // redux state
   const authetication = useSelector(state => state.Authetication);
   const dispatch = useDispatch();
+  const history = useHistory();
+  console.log(authetication);
 
-  let history = useHistory();
+  const onChanegeData = e => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
 
   // if already login, redirect to homepage
   useEffect(() => {
@@ -27,16 +33,27 @@ export function Login() {
     }
   }, [authetication]);
 
-  const onChanegeData = e => {
-    setData({ ...data, [e.target.name]: e.target.value });
-  };
-
-  // login
-  const login = user => {
+  //submit data for register
+  const submitData = e => {
+    e.preventDefault();
+    // check the password if it is too short
+    if (data.password.length < 8) {
+      document.getElementById("password-input").classList.add("is-invalid");
+      setErrorMessage({
+        ...errorMessage,
+        passwordError: "Password must be at least 8 characters"
+      });
+      return;
+    }
     if (
       document.getElementById("username-input").classList.contains("is-invalid")
     ) {
       document.getElementById("username-input").classList.remove("is-invalid");
+    }
+    if (
+      document.getElementById("email-input").classList.contains("is-invalid")
+    ) {
+      document.getElementById("email-input").classList.remove("is-invalid");
     }
     if (
       document.getElementById("password-input").classList.contains("is-invalid")
@@ -44,52 +61,46 @@ export function Login() {
       document.getElementById("password-input").classList.remove("is-invalid");
     }
     setErrorMessage({ ...errorMessage, usernameError: "" });
+    setErrorMessage({ ...errorMessage, emailError: "" });
     setErrorMessage({ ...errorMessage, passwordError: "" });
+    axios
+      .post("/signup", data)
+      .then(function(res) {
+        console.log(res.data);
+        if (res.data === "User added") {
+          // auto login after register
+          login(data);
+        } else if (res.data === "User already exist") {
+          document.getElementById("username-input").classList.add("is-invalid");
+          setErrorMessage({ ...errorMessage, usernameError: res.data });
+        } else if (res.data === "Email already signup") {
+          document.getElementById("email-input").classList.add("is-invalid");
+          setErrorMessage({ ...errorMessage, emailError: res.data });
+        }
+      })
+      .catch(err => console.log(err));
+    setData({ username: "", email: "", password: "" });
+  };
 
+  // login
+  const login = user => {
     axios
       .post("/login", user)
       .then(function(res) {
-        console.log(res.data);
         if (res.data === "Success") {
           dispatch(loginAction());
           history.push("/");
-        } else {
-          if (res.data.message === "User does not exist") {
-            document
-              .getElementById("username-input")
-              .classList.add("is-invalid");
-            setErrorMessage({
-              ...errorMessage,
-              usernameError: "Unknown User or Email"
-            });
-          } else if (res.data.message === "Incorrect Password") {
-            document
-              .getElementById("password-input")
-              .classList.add("is-invalid");
-            setErrorMessage({
-              ...errorMessage,
-              passwordError: res.data.message
-            });
-          }
         }
       })
       .catch(err => console.log(err));
   };
 
-  //submit data for login
-  const submitData = e => {
-    e.preventDefault();
-    const user = data;
-    login(user);
-    setData({ username: "", password: "" });
-  };
-
   return (
     <div className="login-page">
-      <div className="login-card">
+      <div className="Register-card">
         <div className="card">
           <div className="card-header bg-warning">
-            <h2 className="text-center font-weight-bold">Login</h2>
+            <h2 className="text-center font-weight-bold">Sign Up</h2>
           </div>
           <div className="card-body">
             <div className="login-form">
@@ -103,7 +114,7 @@ export function Login() {
                     name="username"
                     onChange={onChanegeData}
                     value={data.username}
-                    placeholder="Username or Email"
+                    placeholder="Username"
                     required
                     autoFocus
                   />
@@ -113,6 +124,26 @@ export function Login() {
                     </div>
                   ) : (
                     errorMessage.usernameError
+                  )}
+                </div>
+                <div className="form-group">
+                  <label className="form-text">Email:</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="email-input"
+                    name="email"
+                    onChange={onChanegeData}
+                    value={data.email}
+                    placeholder="Email"
+                    required
+                  />
+                  {errorMessage.emailError ? (
+                    <div className="invalid-feedback">
+                      {errorMessage.emailError}
+                    </div>
+                  ) : (
+                    errorMessage.emailError
                   )}
                 </div>
                 <div className="form-group">
@@ -137,18 +168,10 @@ export function Login() {
                 </div>
                 <input
                   type="submit"
-                  value="Login"
+                  value="Sign Up"
                   className="btn btn-block btn-warning btn-lg my-4"
                 />
               </form>
-              <div>
-                <h4>Do not have an account?</h4>
-                <a href="/signup">
-                  <button className="btn btn-lg btn-warning my-4">
-                    Sign Up
-                  </button>
-                </a>
-              </div>
             </div>
           </div>
         </div>

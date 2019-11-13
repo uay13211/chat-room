@@ -1,20 +1,32 @@
-.login-page{
-    display: flex;
-    height: 92vh;
-    width: 100%;
-    justify-content: center;
-  }
-  .login-card{
-    margin-top: 75px;
+.login-page {
+  display: flex;
+  height: 92vh;
+  width: 100%;
+  justify-content: center;
+}
+.login-page label {
+  text-align: left;
+}
+.login-card {
+  margin-top: 75px;
+  height: 60%;
+  width: 40%;
+}
+.login-page .card {
+  box-shadow: 1px 8px 20px grey;
+}
+.Register-card {
+  margin-top: 45px;
+  height: 60%;
+  width: 40%;
+}
+@media (max-width: 1028px) {
+  .login-card {
     height: 60%;
-    width: 40%;
+    width: 75%;
   }
-  .login-page .card{
-    box-shadow: 1px 8px 20px grey;
+  .Register-card {
+    height: 60%;
+    width: 75%;
   }
-  @media (max-width: 1028px){
-    .login-card{
-      height: 60%;
-      width: 75%;
-    }
-  }
+}

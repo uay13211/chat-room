@@ -1,26 +1,28 @@
-import React from 'react';
+import React from "react";
 import "./css/chat-room.css";
-import io from 'socket.io-client';
+import { useSelector, useDispatch } from "react-redux";
+import { MySpeech } from "./myspeech";
+import { FdSpeech } from "./fdspeech";
+import receiveFdSpeech from "./action/receiveFdSpeech";
 
-const socket = io("http://localhost:5000");
+export function ChatRoom(props) {
+  const fdSpeech = useSelector(state => state.FdSpeech);
+  const mySpeech = useSelector(state => state.MySpeech);
+  const dispatch = useDispatch();
 
-// messageForm.addEventListener("submit", e => {
-//   e.preventDefault();
-//   let message = messageInput.value;
-//   // send message
-//   socket.emit("send-message", message);
-//   messageInput.value = "";
-// });
+  props.socket.on("send-all", data => {
+    console.log(data);
+    dispatch(receiveFdSpeech(data));
+  });
 
-// socket.on('send-all', data => {
-//   chatroom.innerHTML = "<p>" + data + "</p>";
-// });
-
-
-export function ChatRoom(){
-    return(
-        <div className="chat-room">
-
-        </div>
-    )
-} 
+  return (
+    <div className="chat-room">
+      {mySpeech.map((item, index) => (
+        <MySpeech key={index} data={item} />
+      ))}
+      {fdSpeech.map((item, index) => (
+        <FdSpeech key={index} data={item} />
+      ))}
+    </div>
+  );
+}
