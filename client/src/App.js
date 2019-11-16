@@ -4,8 +4,8 @@ import { BrowserRouter, Route } from "react-router-dom";
 import AllFdLists from "./components/reducer/allfdListsReducer.js";
 import SearchedFdLists from "./components/reducer/searchedFdListsReducer.js";
 import Authetication from "./components/reducer/authetication.js";
-import FdSpeech from "./components/reducer/fdspeech.js";
-import MySpeech from "./components/reducer/myspeech.js";
+import Message from "./components/reducer/messageReducer.js";
+import Username from "./components/reducer/username.js";
 import { Provider } from "react-redux";
 import { ChatPage } from "./components/chatpage";
 import { Login } from "./components/login";
@@ -16,8 +16,8 @@ const allReducers = combineReducers({
   AllFdLists: AllFdLists,
   SearchedFdLists: SearchedFdLists,
   Authetication: Authetication,
-  FdSpeech: FdSpeech,
-  MySpeech: MySpeech
+  Message: Message,
+  Username: Username
 });
 
 let store = createStore(allReducers);

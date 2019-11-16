@@ -1,0 +1,40 @@
+.message-box {
+  position: relative;
+  margin: 15px 0 15px;
+  width: 280px;
+  min-height: 70px;
+  border-radius: 20px;
+  box-shadow: 0px 0px 5px 1px rgba(178, 178, 178, 0.7);
+  background: #f1e4e4;
+}
+
+.mine {
+  left: 70%;
+}
+
+.fd {
+  left: 5%;
+}
+
+.message {
+  font-size: 1.2rem;
+  text-align: left;
+  padding: 5px 18px 5px;
+  margin: 0;
+}
+
+.username {
+  font-size: 1.1rem;
+  text-align: left;
+  padding: 5px 18px 5px;
+  color: #00bdaa;
+  margin: 0;
+  font-weight: bold;
+}
+
+.time {
+  font-size: 0.5rem;
+  text-align: right;
+  padding: 5px 18px 5px;
+  margin: 0;
+}

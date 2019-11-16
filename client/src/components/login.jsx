@@ -3,6 +3,7 @@ import "./css/login.css";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import loginAction from "./action/login";
+import setUsername from "./action/setUsername";
 
 const axios = require("axios");
 axios.defaults.withCredentials = true;
@@ -20,12 +21,12 @@ export function Login() {
 
   let history = useHistory();
 
-  // if already login, redirect to homepage
-  useEffect(() => {
-    if (authetication) {
-      history.push("/");
-    }
-  }, [authetication]);
+  // // if already login, redirect to homepage
+  // useEffect(() => {
+  //   if (authetication) {
+  //     history.push("/");
+  //   }
+  // }, [authetication]);
 
   const onChanegeData = e => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -47,11 +48,12 @@ export function Login() {
     setErrorMessage({ ...errorMessage, passwordError: "" });
 
     axios
-      .post("/login", user)
+      .post("/user/login", user)
       .then(function(res) {
         console.log(res.data);
-        if (res.data === "Success") {
+        if (res.data.message === "Success") {
           dispatch(loginAction());
+          dispatch(setUsername(res.data.username));
           history.push("/");
         } else {
           if (res.data.message === "User does not exist") {
@@ -79,8 +81,7 @@ export function Login() {
   //submit data for login
   const submitData = e => {
     e.preventDefault();
-    const user = data;
-    login(user);
+    login(data);
     setData({ username: "", password: "" });
   };
 

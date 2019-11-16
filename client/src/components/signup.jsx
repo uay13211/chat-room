@@ -1,9 +1,10 @@
 //jshint esversion:6
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import "./css/login.css";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import loginAction from "./action/login";
+import setUsername from "./action/setUsername";
 
 const axios = require("axios");
 axios.defaults.withCredentials = true;
@@ -20,7 +21,6 @@ export function SignUp() {
   const authetication = useSelector(state => state.Authetication);
   const dispatch = useDispatch();
   const history = useHistory();
-  console.log(authetication);
 
   const onChanegeData = e => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -64,13 +64,12 @@ export function SignUp() {
     setErrorMessage({ ...errorMessage, emailError: "" });
     setErrorMessage({ ...errorMessage, passwordError: "" });
     axios
-      .post("/signup", data)
+      .post("/user/signup", data)
       .then(function(res) {
-        console.log(res.data);
-        if (res.data === "User added") {
+        if (res.data === "User signup!") {
           // auto login after register
           login(data);
-        } else if (res.data === "User already exist") {
+        } else if (res.data === "Username already signup") {
           document.getElementById("username-input").classList.add("is-invalid");
           setErrorMessage({ ...errorMessage, usernameError: res.data });
         } else if (res.data === "Email already signup") {
@@ -85,12 +84,11 @@ export function SignUp() {
   // login
   const login = user => {
     axios
-      .post("/login", user)
+      .post("/user/login", user)
       .then(function(res) {
-        if (res.data === "Success") {
-          dispatch(loginAction());
-          history.push("/");
-        }
+        dispatch(loginAction());
+        dispatch(setUsername(res.data.username));
+        history.push("/");
       })
       .catch(err => console.log(err));
   };
