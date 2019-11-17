@@ -79,9 +79,10 @@ export function ChatPage() {
             className="form-control"
             name="data"
             placeholder="Say somthing"
+            id="text-input"
           />
           <div className="input-group-append">
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-success">
               Submit
             </button>
           </div>
