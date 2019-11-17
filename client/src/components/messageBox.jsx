@@ -39,7 +39,7 @@ export function MessageBox(props) {
         </div>
       ) : (
         <div className="message-box fd">
-          <p className="username">Me</p>
+          <p className="username">{props.username}</p>
           <p className="message">{props.message}</p>
           <p className="time">{time}</p>
         </div>

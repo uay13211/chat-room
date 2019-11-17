@@ -5,15 +5,16 @@
   min-height: 70px;
   border-radius: 20px;
   box-shadow: 0px 0px 5px 1px rgba(178, 178, 178, 0.7);
-  background: #f1e4e4;
 }
 
 .mine {
   left: 70%;
+  background: #9fdfcd;
 }
 
 .fd {
   left: 5%;
+  background: #f1e4e4;
 }
 
 .message {

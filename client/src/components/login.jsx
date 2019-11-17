@@ -25,9 +25,9 @@ export function Login() {
     axios
       .post("/user/auth")
       .then(res => {
-        console.log(res);
-        if (res.data === "Success") {
+        if (res.status === 200) {
           dispatch(loginAction());
+          dispatch(setUsername(res.data));
         }
       })
       .catch(err => console.log(err));

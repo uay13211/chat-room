@@ -23,10 +23,9 @@ app.use(bodyParser.json());
 app.use(
   session({
     secret: process.env.MYSECRET,
-    rolling: true,
     resave: true,
     saveUninitialized: true,
-    cookie: { secure: true, maxAge: 360000 }
+    cookie: { secure: false, maxAge: 360000 }
   })
 );
 
@@ -92,7 +91,8 @@ app.post("/api/user/login", (req, res) => {
         } else if (foundUser) {
           bcrypt.compare(password, foundUser.password, (err, corr) => {
             if (corr) {
-              req.session.user = foundUser._id;
+              req.session.token = foundUser.username;
+              req.session.save();
               res.send({
                 message: "Success",
                 username: foundUser.username
@@ -156,8 +156,8 @@ app.post("/api/user/signup", (req, res) => {
 });
 
 app.post("/api/user/auth", (req, res) => {
-  if (req.session) {
-    res.send("Success");
+  if (req.session.token) {
+    res.send(req.session.token);
   } else {
     res.status(401);
   }

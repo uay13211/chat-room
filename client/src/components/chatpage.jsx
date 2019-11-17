@@ -7,9 +7,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { MessageBox } from "./messageBox";
 import loginAction from "./action/login";
 import setMessage from "./action/setMessage";
+import setUsername from "./action/setUsername";
 
 const endPoint = "http://localhost:5000";
 const axios = require("axios");
+axios.defaults.withCredentials = true;
 let socket;
 
 export function ChatPage() {
@@ -25,8 +27,9 @@ export function ChatPage() {
       .post("/user/auth")
       .then(res => {
         console.log(res);
-        if (res.data === "Success") {
+        if (res.status === 200) {
           dispatch(loginAction());
+          dispatch(setUsername(res.data));
         }
       })
       .catch(err => console.log(err));

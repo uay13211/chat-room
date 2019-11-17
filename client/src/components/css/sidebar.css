@@ -53,10 +53,10 @@
   position: relative;
   height: 80%;
   width: 90%;
-  background: #b6e6bd;
   border-radius: 25px;
   top: 10%;
   left: 5%;
+  background: white;
 }
 
 .search-group i {
