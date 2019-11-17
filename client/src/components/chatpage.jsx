@@ -5,6 +5,7 @@ import { Sidebar } from "./sidebar";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { MessageBox } from "./messageBox";
+import loginAction from "./action/login";
 import setMessage from "./action/setMessage";
 
 const endPoint = "http://localhost:5000";
@@ -19,12 +20,24 @@ export function ChatPage() {
   const msgInputBox = useRef(null);
   const history = useHistory();
 
-  // // if already login, redirect to login page
-  // useEffect(() => {
-  //   if (!authetication) {
-  //     history.push("/login");
-  //   }
-  // }, []);
+  useEffect(() => {
+    axios
+      .post("/user/auth")
+      .then(res => {
+        console.log(res);
+        if (res.data === "Success") {
+          dispatch(loginAction());
+        }
+      })
+      .catch(err => console.log(err));
+  }, []);
+
+  // if already login, redirect to login page
+  useEffect(() => {
+    if (!authetication) {
+      history.push("/login");
+    }
+  }, []);
 
   useEffect(() => {
     axios

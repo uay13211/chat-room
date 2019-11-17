@@ -21,12 +21,24 @@ export function Login() {
 
   let history = useHistory();
 
-  // // if already login, redirect to homepage
-  // useEffect(() => {
-  //   if (authetication) {
-  //     history.push("/");
-  //   }
-  // }, [authetication]);
+  useEffect(() => {
+    axios
+      .post("/user/auth")
+      .then(res => {
+        console.log(res);
+        if (res.data === "Success") {
+          dispatch(loginAction());
+        }
+      })
+      .catch(err => console.log(err));
+  }, []);
+
+  // if already login, redirect to homepage
+  useEffect(() => {
+    if (authetication) {
+      history.push("/");
+    }
+  }, [authetication]);
 
   const onChanegeData = e => {
     setData({ ...data, [e.target.name]: e.target.value });

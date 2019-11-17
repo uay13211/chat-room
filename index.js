@@ -6,16 +6,29 @@ const app = express();
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
+const User = require("./user.model");
+const Message = require("./message.model");
+const session = require("express-session");
+
 app.use(
   bodyParser.urlencoded({
     extended: true
   })
 );
+
 app.use(bodyParser.json());
-const server = require("http").createServer(app);
-const io = require("socket.io")(server);
-const User = require("./user.model");
-const Message = require("./message.model");
+
+app.use(
+  session({
+    secret: process.env.MYSECRET,
+    rolling: true,
+    resave: true,
+    saveUninitialized: true,
+    cookie: { secure: true, maxAge: 360000 }
+  })
+);
 
 mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
@@ -43,6 +56,20 @@ io.on("connection", socket => {
   });
 });
 
+app.all("*", function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Content-Type,Content-Length, Authorization,'Origin',Accept,X-Requested-With"
+  );
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.header("Access-Control-Allow-Credentials", true);
+  next();
+});
+
 app.get("/api/user", (req, res) => {
   User.find({}, (err, foundUsers) => {
     res.send(foundUsers);
@@ -65,7 +92,11 @@ app.post("/api/user/login", (req, res) => {
         } else if (foundUser) {
           bcrypt.compare(password, foundUser.password, (err, corr) => {
             if (corr) {
-              res.send({ message: "Success", username: foundUser.username });
+              req.session.user = foundUser._id;
+              res.send({
+                message: "Success",
+                username: foundUser.username
+              });
             } else {
               res.send("Incorrect password");
             }
@@ -121,6 +152,14 @@ app.post("/api/user/signup", (req, res) => {
         });
       }
     });
+  }
+});
+
+app.post("/api/user/auth", (req, res) => {
+  if (req.session) {
+    res.send("Success");
+  } else {
+    res.status(401);
   }
 });
 
